@@ -14,7 +14,7 @@ import com.customer.util.DbConnection;
 public class CustomerDaoImpl implements CustomerDao {
 
 	public List<Customer> getAllCustomers() {
-		String sql = "SELECT ID,FIRST_NAME,LAST_NAME FROM CUSTOMER";
+		String sql = "SELECT ID,FIRST_NAME,LAST_NAME, EMAIL FROM CUSTOMER";
 		List<Customer> customerList = new ArrayList<Customer>();
 		try {
 			Connection connection = DbConnection.getConnection();
@@ -25,7 +25,8 @@ public class CustomerDaoImpl implements CustomerDao {
 				int id = resultSet.getInt("ID");
 				String firstName = resultSet.getString("FIRST_NAME");
 				String lastName = resultSet.getString("LAST_NAME");
-				Customer cust = new Customer(id, firstName, lastName);
+				String email = resultSet.getString("EMAIL");
+				Customer cust = new Customer(id, firstName, lastName, email);
 				customerList.add(cust);
 			}
 
@@ -36,7 +37,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	}
 
 	public Customer getByCustomerById(int id) {
-		String sql = "SELECT ID,FIRST_NAME,LAST_NAME FROM CUSTOMER WHERE ID = ?";
+		String sql = "SELECT ID,FIRST_NAME,LAST_NAME, EMAIL FROM CUSTOMER WHERE ID = ?";
 		Customer customer = null;
 		try {
 			Connection connection = DbConnection.getConnection();
@@ -47,7 +48,8 @@ public class CustomerDaoImpl implements CustomerDao {
 				int custId = resultSet.getInt("ID");
 				String firstName = resultSet.getString("FIRST_NAME");
 				String lastName = resultSet.getString("LAST_NAME");
-				customer = new Customer(custId, firstName, lastName);
+				String email = resultSet.getString("EMAIL");
+				customer = new Customer(custId, firstName, lastName, email);
 			}
 
 		} catch (Exception e) {
@@ -58,7 +60,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	public Customer updateCustomer(Customer customer) {
 
-		String sql = "UPDATE CUSTOMER SET FIRST_NAME = ?, LAST_NAME = ? WHERE ID = ?";
+		String sql = "UPDATE CUSTOMER SET FIRST_NAME = ?, LAST_NAME = ?, EMAIL = ? WHERE ID = ?";
 		try {
 			Connection connection = DbConnection.getConnection();
 			PreparedStatement prepareStatement = connection.prepareStatement(sql);
@@ -66,6 +68,7 @@ public class CustomerDaoImpl implements CustomerDao {
 			prepareStatement.setString(1, customer.getFirstName());
 			prepareStatement.setString(2, customer.getLastName());
 			prepareStatement.setInt(3, (int) customer.getId());
+			prepareStatement.setString(4,  customer.getEmail());
 			prepareStatement.executeUpdate();
 			return customer;
 
@@ -76,13 +79,14 @@ public class CustomerDaoImpl implements CustomerDao {
 	}
 
 	public Customer createCustomer(Customer customer) {
-		String sql = "INSERT INTO CUSTOMER(ID, FIRST_NAME, LAST_NAME) VALUES (?, ?, ?)";
+		String sql = "INSERT INTO CUSTOMER(ID, FIRST_NAME, LAST_NAME, EMAIL) VALUES (?, ?, ?, ?)";
 		try {
 			Connection connection = DbConnection.getConnection();
 			PreparedStatement prepareStatement = connection.prepareStatement(sql);
 			prepareStatement.setInt(1, (int) customer.getId());
 			prepareStatement.setString(2, customer.getFirstName());
 			prepareStatement.setString(3, customer.getLastName());
+			prepareStatement.setString(4, customer.getEmail());
 			prepareStatement.executeUpdate();
 			return customer;
 

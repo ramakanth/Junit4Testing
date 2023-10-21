@@ -14,10 +14,10 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc11</artifactId>
-			<version>23.2.0.0</version>
-		</dependency>
+          <groupId>com.oracle.database.jdbc</groupId>
+          <artifactId>ojdbc6</artifactId>
+           <version>11.2.0.4</version>
+        </dependency>
 
 	</dependencies>
 </project>
